@@ -4,7 +4,7 @@ const bot = new Client()
 const fs = require('fs');
 
 const https = require('https')
-const token = "Njg5Mzc1MjQwMTMxNzA2OTQ0.XnB9cA.V5_eYBfIzBBERjvkM4I33iblqIM"
+const token = ""
 
 const generalCovidURL = "https://corona.lmao.ninja/all"
 const countryCovidURL = "https://corona.lmao.ninja/countries/"
