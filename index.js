@@ -5,7 +5,7 @@ const cheerio = require('cheerio')
 const fs = require('fs');
 const https = require('https')
 
-var token = require('./auth.json') 
+require('dotenv').config() 
 
 const generalCovidURL = "https://corona.lmao.ninja/v2/all"
 const countryCovidURL = "https://corona.lmao.ninja/v2/countries"
@@ -21,6 +21,11 @@ let countryCovid = ''
 let countryCodeRaw = fs.readFileSync("ISO3166-1.alpha2.json")
 let countryCode = JSON.parse(countryCodeRaw)
 
+let randomTextJSON = fs.readFileSync("demguest.json")
+let randomText = JSON.parse(randomTextJSON)
+let textLen = randomText.messages.length
+
+
 function invert(json){
     var inverted = {}
     for(var key in json) {
@@ -28,8 +33,6 @@ function invert(json){
     }
     return inverted;
 }
-
-
 
 //get general Conora data and country Corona
 https.get(generalCovidURL, (resp) => {
@@ -39,7 +42,7 @@ https.get(generalCovidURL, (resp) => {
   });
 
   resp.on('end', () => {
-    console.log(JSON.parse(generalCovid))
+
   });
 
 }).on("error", (err) => {
@@ -53,7 +56,7 @@ https.get(countryCovidURL, (resp) => {
     });
   
     resp.on('end', () => {
-      console.log(JSON.parse(countryCovid))
+
     });
   
   }).on("error", (err) => {
@@ -102,8 +105,8 @@ function image(message){
 //Print when ready
 bot.on('ready', ()=> {
     console.log("Veevu is vee-vued")
+    bot.user.setActivity("with your heart <3");
 })
-
 
 //Commands
 bot.on('message', msg=> {
@@ -112,11 +115,25 @@ bot.on('message', msg=> {
         let args = msg.content.substring(PREFIX.length).split(" ")
         console.log(args)
         switch(args[1]) {
+            case 'help':
+                msg.channel.send(`**prefix** = **vv**
+
+Veevu Bot commands
+---
+**author** - Displays author's name
+**info** - Displays bot's info
+**clear <k>** - Deletes k messages
+**rdn <k>** - Generates a random integer between 0 and k
+**talk** - Talks
+**corona <country code in ISO3166-1.alpha2>** - Displays Covid-19 status for the country
+**cipher <text>** - Encodes text
+                `)
+                break
             case 'author': 
                 msg.channel.send('thivuveevuuuuuuuuuuuuu whoosh')
                 break
             case 'info':
-                msg.channel.send('Version 1.0.0\nCreated on 17/3/2020')
+                msg.channel.send('Version 2.0.0\nCreated on 17/3/2020')
                 break
             case 'clear':
                 if (!args[2]) msg.reply("Please specify how many messages to delete")
@@ -140,7 +157,17 @@ bot.on('message', msg=> {
                         msg.channel.send("Not an integer")
                     }
                 }
-                break                
+                break   
+            case 'talk':
+               
+                let index = Math.floor(Math.random()*textLen)
+                console.log(randomText.messages[index].author.isBot)
+                while (randomText.messages[index].author.isBot == true) {
+                    index = Math.floor(Math.random()*textLen)
+                }
+                   
+                msg.channel.send(randomText.messages[index])
+                break          
             case 'corona':
                 if (args[2]) {
 
@@ -171,11 +198,41 @@ bot.on('message', msg=> {
                     "\n:skull_crossbones: Deaths: " + JSON.parse(generalCovid).deaths + 
                     "\n:sweat_smile: Recovered: " + JSON.parse(generalCovid).recovered)
                 }
-               
+                break 
+            case 'cipher':
+                if (args[2]) {
+                    if (args[2]) {
+                        let message = ""
+                        for (let j = 2; j < args.length; j++) {
+                            if (j != args.length -1) {
+                                message = message + args[j] + " "
+                            } else {
+                                message = message + args[j]
+                            }
+                           
+                        }
+                      
+                        let characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~ "
+                        let decrypted = ""
+                        let randomShift = Math.floor(Math.random() * 26);
+                        for (let i = 0; i < message.length; i++) {
+                            decrypted = decrypted + characters[(randomShift + characters.indexOf(message[i])) % characters.length]
+                        }
+
+                        msg.channel.send(decrypted)
+                    } else {
+                        msg.channel.send("Enter some text to encrypt")
+                    }
+                }
+                break;
+            // case 'curse':
+            //     msg.channel.send(chui[Math.floor(Math.random() * chuiLen)])
+            //     break
             default:
                 console.log("default case")
         }
     }
+
 
     if (msg.content.startsWith("Hello") || msg.content.startsWith("Chào")) {
         let greetings = ["Bonjour mon ami", "Hello my friend", "Wazzup wazzup", "Ni hao ma","Hola", "Ciao"]
@@ -185,9 +242,14 @@ bot.on('message', msg=> {
 
     if (msg.content.startsWith("Chào em")) {
         msg.reply("Anh đứng đây từ chiều")
-        
+    }
+
+    const laughWhat = ["Cười cđg?", "ha ha ha ha", "Vui quá nhỉ?", "Sướng chưa?", "Hài thế", "lmao", "Hài hước", "Chmúa hề"]
+    
+    if (msg.content.startsWith("=)") || msg.content.startsWith(":)") || msg.content.startsWith("=]")) {
+        msg.channel.send(laughWhat[Math.floor(Math.random() * 7)])
     }
     
 })
 
-bot.login(token.token)
+bot.login(process.env.TOKEN)
