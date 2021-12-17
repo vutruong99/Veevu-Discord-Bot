@@ -111,7 +111,7 @@ bot.on('ready', ()=> {
 //Commands
 bot.on('message', msg=> {
     
-    if (msg.content.startsWith(PREFIX)) {
+    if (msg.content.toLowerCase().startsWith(PREFIX)) {
         let args = msg.content.substring(PREFIX.length).split(" ")
         console.log(args)
         switch(args[1]) {
@@ -161,12 +161,17 @@ Veevu Bot commands
             case 'talk':
                
                 let index = Math.floor(Math.random()*textLen)
-                console.log(randomText.messages[index].author.isBot)
+                let index2 = Math.floor(Math.random()*textLen)
                 while (randomText.messages[index].author.isBot == true) {
                     index = Math.floor(Math.random()*textLen)
                 }
+
+                while (randomText.messages[index2].author.isBot == true) {
+                    index2 = Math.floor(Math.random()*textLen)
+                }
                    
                 msg.channel.send(randomText.messages[index])
+                msg.channel.send(randomText.messages[index2])
                 break          
             case 'corona':
                 if (args[2]) {
@@ -246,8 +251,13 @@ Veevu Bot commands
 
     const laughWhat = ["Cười cđg?", "ha ha ha ha", "Vui quá nhỉ?", "Sướng chưa?", "Hài thế", "lmao", "Hài hước", "Chmúa hề"]
     
-    if (msg.content.startsWith("=)") || msg.content.startsWith(":)") || msg.content.startsWith("=]")) {
+    if (msg.content.includes("=)") || msg.content.includes(":)") || msg.content.includes("=]")) {
         msg.channel.send(laughWhat[Math.floor(Math.random() * 7)])
+    }
+    
+    const letMePlay = ["Chơi với", "Không rủ à?", "Game gì babi?", "Vào","Full slot chưa?","+1","Vào nhanh lên"]
+    if (msg.content.includes("chơi") || msg.content.includes("play") || msg.content.includes("game")) {
+        msg.channel.send(letMePlay[Math.floor(Math.random() * 7)])
     }
     
 })
