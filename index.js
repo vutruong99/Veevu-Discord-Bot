@@ -249,16 +249,16 @@ Veevu Bot commands
         msg.reply("Anh đứng đây từ chiều")
     }
 
-    const laughWhat = ["Cười cđg?", "ha ha ha ha", "Vui quá nhỉ?", "Sướng chưa?", "Hài thế", "lmao", "Hài hước", "Chmúa hề"]
+    // const laughWhat = ["Cười cđg?", "ha ha ha ha", "Vui quá nhỉ?", "Sướng chưa?", "Hài thế", "lmao", "Hài hước", "Chmúa hề"]
     
-    if (msg.content.includes("=)") || msg.content.includes(":)") || msg.content.includes("=]")) {
-        msg.channel.send(laughWhat[Math.floor(Math.random() * 7)])
-    }
+    // if (msg.content.includes("=)") || msg.content.includes(":)") || msg.content.includes("=]")) {
+    //     msg.channel.send(laughWhat[Math.floor(Math.random() * 7)])
+    // }
     
-    const letMePlay = ["Chơi với", "Không rủ à?", "Game gì babi?", "Vào","Full slot chưa?","+1","Vào nhanh lên"]
-    if (msg.content.includes("chơi") || msg.content.includes("play") || msg.content.includes("game")) {
-        msg.channel.send(letMePlay[Math.floor(Math.random() * 7)])
-    }
+    // const letMePlay = ["Chơi với", "Không rủ à?", "Game gì babi?", "Vào","Full slot chưa?","+1","Vào nhanh lên"]
+    // if (msg.content.includes("chơi") || msg.content.includes("play") || msg.content.includes("game")) {
+    //     msg.channel.send(letMePlay[Math.floor(Math.random() * 7)])
+    // }
     
 })
 
